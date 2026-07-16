@@ -44,10 +44,15 @@
     NSString *build = [infoPlist objectForKey:@"CFBundleVersion"] ?: @"1";
     NSString *fullVersion = [NSString stringWithFormat:@"v%@ (%@)", version, build];
     
+    // ดึงวันเวลาคอมไพล์จาก Compiler Macro มาตรฐานอัตโนมัติ
+    NSString *compileDate = [NSString stringWithUTF8String:__DATE__]; // ได้รูปแบบเช่น Nov 20 2024
+    NSString *compileTime = [NSString stringWithUTF8String:__TIME__]; // ได้รูปแบบเช่น 18:01:18
+    NSString *buildTimeStr = [NSString stringWithFormat:@"%@ %@", compileDate, compileTime];
+    
     // ยุบข้อมูลของเซกชันแรกเหลือ Dictionary ชุดเดียวใน Array เพื่อให้วาดออกมาเพียงช่องเดียว
     _tableData = @{
         [NSString stringWithUTF8String:AY_OBFUSCATE("ข้อมูลแอป")]: @[
-            @{@"title": appName, @"bundle": bundleID, @"version": fullVersion}
+            @{@"title": appName, @"bundle": bundleID, @"version": fullVersion, @"build_time": buildTimeStr}
         ],
         [NSString stringWithUTF8String:AY_OBFUSCATE("เกี่ยวกับเรา")]: @[
             @{@"title": [NSString stringWithUTF8String:AY_OBFUSCATE("F1X3R")], @"subtitle_val": [NSString stringWithUTF8String:AY_OBFUSCATE("Developer from TGS Team")], @"icon": @"person.crop.circle"}
@@ -113,8 +118,9 @@
         cell.textLabel.text = rowData[@"title"];
         cell.textLabel.textColor = [UIColor labelColor];
         
-        // 2. Version (แสดงผลถัดลงมาด้านล่างในช่องเดียวกันแทนที่ Bundle ID)
-        cell.detailTextLabel.text = rowData[@"version"];
+        // 2. Version และแสดง Build Time ต่อท้ายในบรรทัดเดียวกัน (รวมเป็นบรรทัดที่สอง)
+        NSString *detailText = [NSString stringWithFormat:@"%@ - %@", rowData[@"version"], rowData[@"build_time"]];
+        cell.detailTextLabel.text = detailText;
         cell.detailTextLabel.textColor = [UIColor secondaryLabelColor];
         
         // 3. เวอร์ชั่นขวาสุด: ใช้ UILabel ฝังลงใน accessoryView โดยระบบจะตรึงไว้ขวาสุดให้ทันทีโดยไม่ต้องตั้งค่าพิกัดเอง
