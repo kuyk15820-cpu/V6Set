@@ -216,7 +216,7 @@
         [[NSFileManager defaultManager] copyItemAtPath:url.path toPath:inputPath error:nil];
         
         // ประกอบคำสั่งและเริ่มประมวลผลผ่านคลัง FFmpegKit โดยใช้ความเร็วคงที่ 2.0
-        NSString *cmd = [NSString stringWithFormat:[NSString stringWithUTF8String:AY_OBFUSCATE("-itsscale 2.0 - i %@ -codec copy %@")], inputPath, outputPath];
+        NSString *cmd = [NSString stringWithFormat:[NSString stringWithUTF8String:AY_OBFUSCATE("-itsscale 2.0 -i %@ -codec copy %@")], inputPath, outputPath];
         
         [FFmpegKit executeAsync:cmd withCompleteCallback:^(id<Session> session) {
             ReturnCode *code = [session getReturnCode];
