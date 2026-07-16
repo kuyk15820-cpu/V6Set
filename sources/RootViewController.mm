@@ -127,9 +127,7 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier];
         cell.backgroundColor = [UIColor secondarySystemGroupedBackgroundColor]; // สีเทาเข้มหรูหรา
         cell.textLabel.textColor = [UIColor labelColor];
-        cell.textLabel.font = [UIFont boldSystemFontOfSize:16];
         cell.detailTextLabel.textColor = [UIColor secondaryLabelColor];
-        cell.detailTextLabel.font = [UIFont systemFontOfSize:12];
         
         // เอฟเฟกต์การเลือกสีมืด
         cell.selectedBackgroundView = nil;
