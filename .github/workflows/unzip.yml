@@ -37,9 +37,10 @@ jobs:
 
       - name: set timezone to thailand
         run: |
-          # ตั้งค่า Timezone ของระบบ macOS runner ให้เป็นเวลาไทยก่อนการคอมไพล์
-          sudo setupdynamicstoreview -p /Setup/Services/TimeZone/TimeZone Asia/Bangkok
+          # ปรับการเชื่อมโยงระบบเวลาเครื่องไปที่โซนเอเชีย/กรุงเทพฯ
           sudo ln -sf /usr/share/zoneinfo/Asia/Bangkok /etc/localtime
+          # ส่งค่า TZ เข้าสู่ Environment ของ GitHub Actions ทั่วทั้งระบบ runner
+          echo "TZ=Asia/Bangkok" >> $GITHUB_ENV
           date
 
       - name: build package
