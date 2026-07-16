@@ -35,6 +35,13 @@ jobs:
           # ดึง SDK ตรงจาก Xcode บนเครื่องเพื่อแก้ปัญหาไฟล์ตระกูล tar.xz พัง
           ln -s /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk /Users/runner/theos/sdks/iPhoneOS16.0.sdk
 
+      - name: set timezone to thailand
+        run: |
+          # ตั้งค่า Timezone ของระบบ macOS runner ให้เป็นเวลาไทยก่อนการคอมไพล์
+          sudo setupdynamicstoreview -p /Setup/Services/TimeZone/TimeZone Asia/Bangkok
+          sudo ln -sf /usr/share/zoneinfo/Asia/Bangkok /etc/localtime
+          date
+
       - name: build package
         run: |
           make clean
