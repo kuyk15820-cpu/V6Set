@@ -73,15 +73,10 @@ $(APPLICATION_NAME)_EXTRA_FRAMEWORKS += ffmpegkit Lottie
 $(APPLICATION_NAME)_CODESIGN_FLAGS += -Slayout/entitlements.plist
 $(APPLICATION_NAME)_RESOURCE_DIRS = ./layout/Resources
 
-BUILD_NUMBER := $(shell date +%y%m%d%H%M)
-
 include $(THEOS_MAKE_PATH)/application.mk
 include $(THEOS_MAKE_PATH)/aggregate.mk
 
 before-package::
-	@echo "[*] Updating Build Number to $(BUILD_NUMBER)..."
-	@sed -i '' 's/<string>1<\/string>/<string>$(BUILD_NUMBER)<\/string>/g' $(THEOS_STAGING_DIR)/Applications/$(APPLICATION_NAME).app/Info.plist
-	
 	@echo "[*] Copying all FFmpegKit frameworks from deps into App Bundle..."
 	@mkdir -p $(THEOS_STAGING_DIR)/Applications/$(APPLICATION_NAME).app/Frameworks
 	
