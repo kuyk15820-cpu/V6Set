@@ -29,32 +29,32 @@
     self.navigationController.navigationBar.topItem.backBarButtonItem = backButton;
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
 
-    self.title = [NSString stringWithUTF8String:AY_OBFUSCATE("การตั้งค่า")];
+    self.title = [NSString stringWithUTF8String:AY_OBFUSCATE("Info")];
     self.view.backgroundColor = [UIColor systemBackgroundColor];
     
     _sectionTitles = @[
-        [NSString stringWithUTF8String:AY_OBFUSCATE("ข้อมูลแอป")], 
-        [NSString stringWithUTF8String:AY_OBFUSCATE("เกี่ยวกับเรา")]
+        [NSString stringWithUTF8String:AY_OBFUSCATE("ABOUT")], 
+        [NSString stringWithUTF8String:AY_OBFUSCATE("CREDITS")]
     ];
     
     NSDictionary *infoPlist = [[NSBundle mainBundle] infoDictionary];
     NSString *appName = [infoPlist objectForKey:@"CFBundleDisplayName"] ?: ([infoPlist objectForKey:@"CFBundleName"] ?: @"Application");
     NSString *bundleID = [[NSBundle mainBundle] bundleIdentifier] ?: @"com.example.app";
     NSString *version = [infoPlist objectForKey:@"CFBundleShortVersionString"] ?: @"1.0";
-    NSString *build = [infoPlist objectForKey:@"CFBundleVersion"] ?: @"1";
-    NSString *fullVersion = [NSString stringWithFormat:@"v%@ (%@)", version, build];
     
     // ดึงวันเวลาคอมไพล์จาก Compiler Macro มาตรฐานอัตโนมัติ
     NSString *compileDate = [NSString stringWithUTF8String:__DATE__]; // ได้รูปแบบเช่น Nov 20 2024
     NSString *compileTime = [NSString stringWithUTF8String:__TIME__]; // ได้รูปแบบเช่น 18:01:18
     NSString *buildTimeStr = [NSString stringWithFormat:@"%@ %@", compileDate, compileTime];
     
+    NSString *fullVersion = [NSString stringWithFormat:@"v%@ (%@)", version, buildTimeStr];
+    
     // ยุบข้อมูลของเซกชันแรกเหลือ Dictionary ชุดเดียวใน Array เพื่อให้วาดออกมาเพียงช่องเดียว
     _tableData = @{
-        [NSString stringWithUTF8String:AY_OBFUSCATE("ข้อมูลแอป")]: @[
+        [NSString stringWithUTF8String:AY_OBFUSCATE("ABOUT")]: @[
             @{@"title": appName, @"bundle": bundleID, @"version": fullVersion, @"build_time": buildTimeStr}
         ],
-        [NSString stringWithUTF8String:AY_OBFUSCATE("เกี่ยวกับเรา")]: @[
+        [NSString stringWithUTF8String:AY_OBFUSCATE("CREDITS")]: @[
             @{@"title": [NSString stringWithUTF8String:AY_OBFUSCATE("F1X3R")], @"subtitle_val": [NSString stringWithUTF8String:AY_OBFUSCATE("Developer from TGS Team")], @"icon": @"person.crop.circle"}
         ]
     };
