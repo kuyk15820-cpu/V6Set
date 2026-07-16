@@ -22,20 +22,19 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:[NSString stringWithUTF8String:AY_OBFUSCATE("หน้าหลัก")] 
+    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:[NSString stringWithUTF8String:AY_OBFUSCATE("TT-Tool")] 
                                                                    style:UIBarButtonItemStylePlain 
                                                                   target:nil 
                                                                   action:nil];
     self.navigationController.navigationBar.topItem.backBarButtonItem = backButton;
-    self.navigationController.navigationBar.tintColor = [UIColor linkColor];
+    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
 
     self.title = [NSString stringWithUTF8String:AY_OBFUSCATE("การตั้งค่า")];
     self.view.backgroundColor = [UIColor systemBackgroundColor];
     
     _sectionTitles = @[
         [NSString stringWithUTF8String:AY_OBFUSCATE("ข้อมูลแอป")], 
-        [NSString stringWithUTF8String:AY_OBFUSCATE("เกี่ยวกับเรา")], 
-        [NSString stringWithUTF8String:AY_OBFUSCATE("ประวัติการอัปเดต")]
+        [NSString stringWithUTF8String:AY_OBFUSCATE("เกี่ยวกับเรา")]
     ];
     
     NSDictionary *infoPlist = [[NSBundle mainBundle] infoDictionary];
@@ -51,13 +50,7 @@
             @{@"title": appName, @"bundle": bundleID, @"version": fullVersion}
         ],
         [NSString stringWithUTF8String:AY_OBFUSCATE("เกี่ยวกับเรา")]: @[
-            @{@"title": [NSString stringWithUTF8String:AY_OBFUSCATE("Developer")], @"value": [NSString stringWithUTF8String:AY_OBFUSCATE("@K02 (The-Genesis Team)")], @"icon": @"person.crop.circle"}
-        ],
-        [NSString stringWithUTF8String:AY_OBFUSCATE("ประวัติการอัปเดต")]: @[
-            @{@"title": [NSString stringWithUTF8String:AY_OBFUSCATE("Total Updates")], @"value": [NSString stringWithUTF8String:AY_OBFUSCATE("3 Times")], @"icon": @"clock.arrow.circlepath"},
-            @{@"title": [NSString stringWithUTF8String:AY_OBFUSCATE("Update #3")], @"value": [NSString stringWithUTF8String:AY_OBFUSCATE("2026-06-10")], @"icon": @"arrow.up.circle"},
-            @{@"title": [NSString stringWithUTF8String:AY_OBFUSCATE("Update #2")], @"value": [NSString stringWithUTF8String:AY_OBFUSCATE("2026-03-15")], @"icon": @"arrow.up.circle"},
-            @{@"title": [NSString stringWithUTF8String:AY_OBFUSCATE("Update #1")], @"value": [NSString stringWithUTF8String:AY_OBFUSCATE("2026-01-10")], @"icon": @"arrow.up.circle"}
+            @{@"title": [NSString stringWithUTF8String:AY_OBFUSCATE("F1X3R")], @"subtitle_val": [NSString stringWithUTF8String:AY_OBFUSCATE("Developer from TGS Team")], @"icon": @"person.crop.circle"}
         ]
     };
     
@@ -104,7 +97,8 @@
             // ใช้สไตล์ Subtitle เพื่อให้ชื่อแอปอยู่บน และ Bundle ID ตกลงมาอยู่ด้านล่างในช่องเดียวกัน
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier];
         } else {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellIdentifier];
+            // ปรับเป็น UITableViewCellStyleSubtitle เพื่อรองรับการย้ายค่าไปแสดงใน subtitle
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier];
         }
     }
     
@@ -120,18 +114,13 @@
         cell.textLabel.font = [UIFont boldSystemFontOfSize:17];
         cell.textLabel.textColor = [UIColor labelColor];
         
-        // 2. Bundle ID (แสดงผลถัดลงมาด้านล่างในช่องเดียวกัน)
-        cell.detailTextLabel.text = rowData[@"bundle"];
+        // 2. Version (แสดงผลถัดลงมาด้านล่างในช่องเดียวกันแทนที่ Bundle ID)
+        cell.detailTextLabel.text = rowData[@"version"];
         cell.detailTextLabel.font = [UIFont systemFontOfSize:13];
         cell.detailTextLabel.textColor = [UIColor secondaryLabelColor];
         
         // 3. เวอร์ชั่นขวาสุด: ใช้ UILabel ฝังลงใน accessoryView โดยระบบจะตรึงไว้ขวาสุดให้ทันทีโดยไม่ต้องตั้งค่าพิกัดเอง
-        UILabel *versionLabel = [[UILabel alloc] init];
-        versionLabel.text = rowData[@"version"];
-        versionLabel.font = [UIFont systemFontOfSize:14 weight:UIFontWeightMedium];
-        versionLabel.textColor = [UIColor secondaryLabelColor];
-        [versionLabel sizeToFit]; // ให้ขนาดขยายตามความยาวตัวเลขเวอร์ชัน
-        cell.accessoryView = versionLabel;
+        // เอาออกตามคำสั่ง ย้ายไปใส่ใน subtitle แทนแล้ว
         
         // 4. ซ้ายมือสุดแสดงไอค่อนแอปดั้งเดิมจากระบบผ่าน Private API ลับ
         UIImage *appIcon = nil;
@@ -156,8 +145,9 @@
         cell.textLabel.font = [UIFont boldSystemFontOfSize:16];
         cell.textLabel.textColor = [UIColor labelColor];
         
-        cell.detailTextLabel.text = rowData[@"value"];
-        cell.detailTextLabel.font = [UIFont systemFontOfSize:15];
+        // แสดงข้อความในส่วนของ Subtitle ด้านล่างหัวข้อแทน
+        cell.detailTextLabel.text = rowData[@"subtitle_val"];
+        cell.detailTextLabel.font = [UIFont systemFontOfSize:13];
         cell.detailTextLabel.textColor = [UIColor secondaryLabelColor];
         
         if (rowData[@"icon"] && [rowData[@"icon"] length] > 0) {
@@ -166,7 +156,7 @@
         }
         
         // ตกแต่งปุ่มตามประเภทเงื่อนไข
-        if ([rowData[@"value"] isEqualToString:[NSString stringWithUTF8String:AY_OBFUSCATE("@K02 (The-Genesis Team)")]]) {
+        if ([rowData[@"subtitle_val"] isEqualToString:[NSString stringWithUTF8String:AY_OBFUSCATE("Developer from TGS Team")]]) {
             cell.selectionStyle = UITableViewCellSelectionStyleDefault;
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
@@ -181,7 +171,7 @@
     if ([view isKindOfClass:[UITableViewHeaderFooterView class]]) {
         UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
         header.textLabel.textColor = [UIColor secondaryLabelColor];
-        header.textLabel.font = [UIFont boldSystemFontOfSize:13];
+        header.textLabel.font = [UIFont systemFontOfSize:13]; // ปรับเป็นฟอนต์ตัวปกติ (ไม่เอาหนา) ตามคำสั่ง
     }
 }
 
@@ -196,8 +186,8 @@
     NSString *sectionTitle = _sectionTitles[indexPath.section];
     NSDictionary *rowData = _tableData[sectionTitle][indexPath.row];
     
-    if ([rowData[@"value"] isEqualToString:[NSString stringWithUTF8String:AY_OBFUSCATE("@K02 (The-Genesis Team)")]]) {
-        NSURL *telegramURL = [NSURL URLWithString:[NSString stringWithUTF8String:AY_OBFUSCATE("https://t.me/K02_TH")]];
+    if ([rowData[@"subtitle_val"] isEqualToString:[NSString stringWithUTF8String:AY_OBFUSCATE("Developer from TGS Team")]]) {
+        NSURL *telegramURL = [NSURL URLWithString:[NSString stringWithUTF8String:AY_OBFUSCATE("tg://user?id=6105731078")]];
         if ([[UIApplication sharedApplication] canOpenURL:telegramURL]) {
             [[UIApplication sharedApplication] openURL:telegramURL options:@{} completionHandler:nil];
         }
