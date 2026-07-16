@@ -111,12 +111,10 @@
     if (indexPath.section == 0) {
         // 1. ชื่อแอป (แสดงผลซ้ายบนของช่อง)
         cell.textLabel.text = rowData[@"title"];
-        cell.textLabel.font = [UIFont boldSystemFontOfSize:17];
         cell.textLabel.textColor = [UIColor labelColor];
         
         // 2. Version (แสดงผลถัดลงมาด้านล่างในช่องเดียวกันแทนที่ Bundle ID)
         cell.detailTextLabel.text = rowData[@"version"];
-        cell.detailTextLabel.font = [UIFont systemFontOfSize:13];
         cell.detailTextLabel.textColor = [UIColor secondaryLabelColor];
         
         // 3. เวอร์ชั่นขวาสุด: ใช้ UILabel ฝังลงใน accessoryView โดยระบบจะตรึงไว้ขวาสุดให้ทันทีโดยไม่ต้องตั้งค่าพิกัดเอง
@@ -142,23 +140,28 @@
     } else {
         // เซกชันมาตรฐานอื่นๆ (เกี่ยวกับเรา, ประวัติอัปเดต, ระบบ)
         cell.textLabel.text = rowData[@"title"];
-        cell.textLabel.font = [UIFont boldSystemFontOfSize:16];
         cell.textLabel.textColor = [UIColor labelColor];
         
         // แสดงข้อความในส่วนของ Subtitle ด้านล่างหัวข้อแทน
         cell.detailTextLabel.text = rowData[@"subtitle_val"];
-        cell.detailTextLabel.font = [UIFont systemFontOfSize:13];
         cell.detailTextLabel.textColor = [UIColor secondaryLabelColor];
         
+        // เคลียร์ imageView ฝั่งซ้ายไม่ให้แสดงผลในกลุ่ม "เกี่ยวกับเรา" เพื่อย้ายไปไว้ทางขวา
+        cell.imageView.image = nil;
+        
+        // สร้าง UIImageView และกำหนด Icon ไปไว้ที่ด้านขวา (ผ่าน accessoryView)แทน
         if (rowData[@"icon"] && [rowData[@"icon"] length] > 0) {
-            cell.imageView.image = [UIImage systemImageNamed:rowData[@"icon"]];
-            cell.imageView.tintColor = [UIColor labelColor];
+            UIImage *sideIcon = [UIImage systemImageNamed:rowData[@"icon"]];
+            if (sideIcon) {
+                UIImageView *iconImageView = [[UIImageView alloc] initWithImage:sideIcon];
+                iconImageView.tintColor = [UIColor labelColor];
+                cell.accessoryView = iconImageView;
+            }
         }
         
         // ตกแต่งปุ่มตามประเภทเงื่อนไข
         if ([rowData[@"subtitle_val"] isEqualToString:[NSString stringWithUTF8String:AY_OBFUSCATE("Developer from TGS Team")]]) {
             cell.selectionStyle = UITableViewCellSelectionStyleDefault;
-            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
     }
     
@@ -171,7 +174,6 @@
     if ([view isKindOfClass:[UITableViewHeaderFooterView class]]) {
         UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
         header.textLabel.textColor = [UIColor secondaryLabelColor];
-        header.textLabel.font = [UIFont systemFontOfSize:13]; // ปรับเป็นฟอนต์ตัวปกติ (ไม่เอาหนา) ตามคำสั่ง
     }
 }
 
